@@ -1,0 +1,120 @@
+﻿@using Website_Course_AVG.Models
+@model LoginViewModel
+
+@{
+    ViewBag.Title = "LOGIN";
+}
+<style>
+    input {
+        max-width: none;
+    }
+</style>
+<main aria-labelledby="title">
+    <!----------------------- Main Container -------------------------->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <!----------------------- Login Container -------------------------->
+        <div class="row border rounded-5 p-3 bg-white shadow box-area" style="width: 930px;">
+            <!--------------------------- Left Box ----------------------------->
+            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: #103cbe;">
+                <div class="featured-image mb-3">
+                    @*<img src="/Content/img/images/login.png" class="img-fluid" style="width: 250px;">*@
+                </div>
+                <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Be Verified</p>
+                @*<small class="text-white text-wrap text-center" style="width: 17rem;font-family: 'Courier New', Courier, monospace;">Join experienced Designers on this platform.</small>*@
+            </div>
+            <!-------------------- ------ Right Box ---------------------------->
+
+            <div class="col-md-6 ">
+                <div class="right-box" style="padding: 20px 15px 20px 20px;">
+                    <div class="row align-items-center">
+                        <div class="header-text mb-4">
+                            <h2 class="text-info">@global_asax.Trans("Hello,Again")</h2>
+                            <p>@global_asax.Trans("We are happy to have you back.")</p>
+                        </div>
+                        <section id="loginForm">
+                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group mb-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(m => m.userName, new { @class = "form-control form-control-lg bg-light fs-6  rounded-end", placeholder = "username" })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.userName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group mb-3">
+                                    <div class="input-group">
+
+                                        @Html.PasswordFor(m => m.Password, new { @id = "passwordField", style = "z-index: 1;", @class = "form-control form-control-lg bg-light fs-6 rounded-end ", placeholder = "Password" })
+                                        <span id="firstEyeSpan" class="visually-hidden input-group-text border-0 position-absolute end-0 h-100 " style="z-index: 2; background-color: transparent ">
+                                            <i class="fa fa-eye-slash" id="firstEyeIcon"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="row">
+                                    <div class="input-group mb-3 d-flex justify-content-between">
+                                        <div class="checkbox">
+                                            @*@Html.CheckBoxFor(m => m.RememberMe)
+                                                @Html.LabelFor(m => m.RememberMe)*@
+                                        </div>
+                                        <div class="row">
+                                            <small><a href="@Url.Action("ForgotPassword", "Account")">@global_asax.Trans("Forgot Password?")</a></small>
+                                            @*<section id="forgotPasswordForm">
+                                                    @Html.ActionLinkl()
+                                                </section>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-group mb-3 d-flex justify-content-center">
+                                        <input type="submit" value="Log in" class="btn btn-outline-dark w-75" />
+                                    </div>
+                                </div>
+                            }
+                        </section>
+                        <div class="input-group mb-3 justify-content-center">
+                            <section id="socialLoginForm">
+                                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                            </section>
+                        </div>
+                        <div class="row">
+                            <small>@global_asax.Trans("Don't have account?") <a href="@Url.Action("Register", "Account")">@global_asax.Trans("Sign Up")</a></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var passwordField = document.getElementById("passwordField");
+        var firstEyeIcon = document.getElementById("firstEyeIcon");
+        var firstEyeSpan = document.getElementById("firstEyeSpan");
+
+        firstEyeSpan.addEventListener("click", function () {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                firstEyeIcon.classList.remove("fa-eye-slash");
+                firstEyeIcon.classList.add("fa-eye");
+            } else {
+                passwordField.type = "password";
+                firstEyeIcon.classList.remove("fa-eye");
+                firstEyeIcon.classList.add("fa-eye-slash");
+            }
+        });
+
+        passwordField.addEventListener("click", function () {
+            firstEyeSpan.classList.remove("visually-hidden")
+        });
+
+        passwordField.addEventListener("focus", function () {
+            firstEyeIcon.classList.remove("visually-hidden");
+        });
+    </script>
+}
+
+
